@@ -57,7 +57,7 @@ class HostMonitor extends IPSModule
         		echo "FEHLER - Damit die Skript-Benachrichtigung verwendet werdet kann, muss ein Skript ausgewählt werden!";
       	}
 
-        if (($this->ReadPropertyInteger("HostAdresse") != "") AND ($this->ReadPropertyInteger("HostName") != ""))
+        if (($this->ReadPropertyString("HostName") != "") AND ($this->ReadPropertyString("HostAdresse") != ""))
         {
 		        //Variablen erstellen
 		        $this->RegisterVariableBoolean("HostStatus", "Host - Status", "HMON.OfflineOnline");
