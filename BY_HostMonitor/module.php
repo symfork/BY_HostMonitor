@@ -38,9 +38,6 @@ class HostMonitor extends IPSModule
         //Never delete this line!
         parent::ApplyChanges();
         
-        //TEST
-        echo "XXX:".$this->ReadPropertyString("EigenesSkriptID").":XXX";
-        
         //Variablenprofil erstellen
         $this->RegisterProfileBooleanEx("HMON.OfflineOnline", "Network", "", "", Array(
                                              Array(false, "Offline",  "", 0xFF0000),
@@ -58,14 +55,6 @@ class HostMonitor extends IPSModule
       	if (($this->ReadPropertyBoolean("EigenesSkriptAktiv") === true) AND ($this->ReadPropertyInteger("EigenesSkriptID") == ""))
         {
         		echo "FEHLER - Damit die Skript-Benachrichtigung verwendet werdet kann, muss ein Skript ausgewählt werden!";
-      	}
-      	if (($this->ReadPropertyBoolean("PushMsgAktiv") === true) AND ($this->ReadPropertyInteger("BenachrichtigungsText") == ""))
-      	{
-      			echo "FEHLER - Damit die Push-Benachrichtigung verwendet werdet kann, muss ein Text eingetragen werden!";
-      	}
-      	if (($this->ReadPropertyBoolean("EMailMsgAktiv") === true) AND ($this->ReadPropertyInteger("BenachrichtigungsText") == ""))
-      	{
-      			echo "FEHLER - Damit die EMail-Benachrichtigung verwendet werdet kann, muss ein Text eingetragen werden!";
       	}
 
         if (($this->ReadPropertyInteger("HostAdresse") != "") AND ($this->ReadPropertyInteger("HostName") != ""))
@@ -122,7 +111,7 @@ class HostMonitor extends IPSModule
 				//PUSH-NACHRICHT
 				if ($this->ReadPropertyBoolean("PushMsgAktiv") == true)
         {
-        		$WFinstanzID = $this->ReadPropertyInteger("WebFrontInstanceID");
+        		$WFinstanzID = $this->ReadPropertyString("WebFrontInstanceID");
         		if (($WFinstanzID != "") AND (@IPS_InstanceExists($WFinstanzID) === true))
         		{
         				WFC_PushNotification($WFinstanzID, "HostMonitor", $Text, "", 0);
@@ -132,7 +121,7 @@ class HostMonitor extends IPSModule
         //EMAIL-NACHRICHT
         if ($this->ReadPropertyBoolean("EMailMsgAktiv") == true)
         {
-        		$SMTPinstanzID = $this->ReadPropertyInteger("SmtpInstanceID");
+        		$SMTPinstanzID = $this->ReadPropertyString("SmtpInstanceID");
         		if (($SMTPinstanzID != "") AND (@IPS_InstanceExists($SMTPinstanzID) === true))
         		{
         				SMTP_SendMail($SMTPinstanzID, "HostMonitor", $Text);
@@ -142,7 +131,7 @@ class HostMonitor extends IPSModule
         //EIGENE-AKTION
         if ($this->ReadPropertyBoolean("EigenesSkriptAktiv") == true)
         {
-        		$SkriptID = $this->ReadPropertyInteger("EigenesSkriptID");
+        		$SkriptID = $this->ReadPropertyString("EigenesSkriptID");
         		if (($SkriptID != "") AND (@IPS_ScriptExists($SkriptID) === true))
         		{
         				IPS_RunScriptEx($SkriptID, array("HMON_Hostname" => $Hostname, "HMON_Adresse" => $Hostadresse, "HMON_Text" => $BenachrichtigungsText, "HMON_Zeit" => $Hostname));
