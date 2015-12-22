@@ -76,7 +76,7 @@ class HostMonitor extends IPSModule
     {
       	$Hostname = $this->ReadPropertyString("HostName");
 				$Hostadresse = $this->ReadPropertyString("HostAdresse");
-      	if (($this->ReadPropertyInteger("HostAdresse") != "") AND ($this->ReadPropertyInteger("HostName") != ""))
+      	if (($Hostname != "") AND ($Hostadresse != ""))
         {      	
 						$result = @Sys_Ping($Hostadresse, 1000);
 						$this->SetValueBoolean("HostStatus", $result);

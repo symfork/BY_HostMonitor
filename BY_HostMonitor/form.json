@@ -29,7 +29,7 @@
   [
 
     { "type": "Button", "label": "Update", "onClick": "HMON_Update($id);" },
-    { "type": "Button", "label": "Test-Benachrichtigung", "onClick": "HMON_TestBenachrichtigung($id);" }
+    { "type": "Button", "label": "Test-Benachrichtigung", "onClick": "HMON_Benachrichtigung($id);" }
 
   ]
 }
