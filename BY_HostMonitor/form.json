@@ -1,0 +1,35 @@
+{
+  "elements":
+  [
+
+    { "type": "Label", "label": "##### HostMonitor v1.0 (22.12.2015 XX.XXUhr) #####" },
+    { "type": "ValidationTextBox", "name": "HostName", "caption": "Host-Name" },
+    { "type": "ValidationTextBox", "name": "HostAdresse", "caption": "Host-IP/URL" },
+    { "type": "Label", "label": "Intervall für die Prüfung des Host:" },
+    { "type": "IntervalBox", "name": "Intervall", "caption": "Sekunden" },
+    { "type": "Label", "label": "Nach X Sekunden ohne Ping wird eine Benachrichtigung über die aktivierten Wege ausgelöst (0 = sofortige Benachrichtigung):" },
+    { "type": "ValidationTextBox", "name": "AlarmZeit", "caption": "Benachrichtigung nach X Sekunden" },
+    { "type": "Label", "label": "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" },
+    { "type": "Label", "label": "Text der als Benachrichtigung gesendet wird (Es stehen verschiedene Variablen zur Verfügung):" },
+    { "type": "Label", "label": "§HOST = Hostname, §ADRESSE = Hostadresse, §ZEITSEK = Sekunden offline, §ZEITMIN = Minuten offline, §ZEITSTD = Stunden offline, §ZEITTAGE = Tage offline" },
+    { "type": "ValidationTextBox", "name": "BenachrichtigungsText", "caption": "Benachrichtigungs-Text" },
+    { "type": "Label", "label": "---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" },
+    { "type": "Label", "label": "WebFront-Instanz, welche für den Versand der Push-Nachrichten verwendet wird (gültige IPS-Subscription notwendig):" },
+    { "type": "SelectInstance", "name": "WebFrontInstanceID", "caption": "WebFront-Instanz" },
+    { "type": "CheckBox", "name": "PushMsgAktiv", "caption": "Push-Benachrichtigung" },
+    { "type": "Label", "label": "SMTP-Instanz, welche für den Versand der EMail-Nachrichten verwendet wird:" },
+    { "type": "SelectInstance", "name": "SmtpInstanceID", "caption": "SMTP-Instanz" },
+    { "type": "CheckBox", "name": "EMailMsgAktiv", "caption": "EMail-Benachrichtigung" },
+    { "type": "Label", "label": "Skript für eigene Benachrichtigungs-Aktion (Sonos, Enigma2-Nachricht, LED blinken, SMS, ...):" },
+    { "type": "SelectScript", "name": "EigenesSkriptID", "caption": "Eigene Aktion (Skript)" },
+    { "type": "CheckBox", "name": "EigenesSkriptAktiv", "caption": "Eigenes-Skript" }
+
+  ],
+  "actions":
+  [
+
+    { "type": "Button", "label": "Update", "onClick": "HMON_Update($id);" };
+    { "type": "Button", "label": "Test-Benachrichtigung", "onClick": "HMON_TestBenachrichtigung($id);" }
+
+  ]
+}

@@ -1,0 +1,14 @@
+{
+    "id": "{87F46796-CC43-442D-94FD-9990BD8D9F52}",
+    "name": "HostMonitor",
+    "type": 3,
+    "vendor": "",
+    "aliases": 
+    [
+        "HostMonitor"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "HMON"
+}
