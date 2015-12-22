@@ -106,7 +106,7 @@ class HostMonitor extends IPSModule
 				$BenachrichtigungsText = $this->ReadPropertyString("BenachrichtigungsText");
 				$Hostname = $this->ReadPropertyString("HostName");
 				$Hostadresse = $this->ReadPropertyString("HostAdresse");
-				$LastOnlineTimeDiffSEK = (int)(time() - GetValueInteger($this->GetIDForIdent("HostLastOnline")), 2);
+				$LastOnlineTimeDiffSEK = (int)(time() - GetValueInteger($this->GetIDForIdent("HostLastOnline"));
 				$LastOnlineTimeDiffMIN = (int)($LastOnlineTimeDiffSEK / 60);
 				$LastOnlineTimeDiffSTD = round($LastOnlineTimeDiffMIN / 60, 2);
 				$LastOnlineTimeDiffTAGE = round($LastOnlineTimeDiffSTD / 24, 2);
