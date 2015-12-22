@@ -14,9 +14,9 @@ class HostMonitor extends IPSModule
         $this->RegisterPropertyInteger("Intervall", 60);
         $this->RegisterPropertyInteger("AlarmZeit", 0);
         $this->RegisterPropertyString("BenachrichtigungsText", "Der Host -§HOST- mit Adresse -§ADRESSE- ist seit §ZEITMIN Minuten nicht mehr erreichbar!");
-        $this->RegisterPropertyInteger("WebFrontInstanceID", "");
-        $this->RegisterPropertyInteger("SmtpInstanceID", "");
-        $this->RegisterPropertyInteger("EigenesSkriptID", "");
+        $this->RegisterPropertyString("WebFrontInstanceID", "");
+        $this->RegisterPropertyString("SmtpInstanceID", "");
+        $this->RegisterPropertyString("EigenesSkriptID", "");
         $this->RegisterPropertyBoolean("PushMsgAktiv", false);
         $this->RegisterPropertyBoolean("EMailMsgAktiv", false);
         $this->RegisterPropertyBoolean("EigenesSkriptAktiv", false);
@@ -37,6 +37,9 @@ class HostMonitor extends IPSModule
     {
         //Never delete this line!
         parent::ApplyChanges();
+        
+        //TEST
+        echo "XXX:".$this->ReadPropertyString("EigenesSkriptID").":XXX";
         
         //Variablenprofil erstellen
         $this->RegisterProfileBooleanEx("HMON.OfflineOnline", "Network", "", "", Array(
@@ -167,6 +170,23 @@ class HostMonitor extends IPSModule
             return true;
         }
         return false;
+    }
+    
+    protected function RegisterProfileBooleanEx($Name, $Icon, $Prefix, $Suffix, $Associations) {
+        if ( sizeof($Associations) === 0 ){
+            $MinValue = 0;
+            $MaxValue = 0;
+        } else {
+            $MinValue = $Associations[0][0];
+            $MaxValue = $Associations[sizeof($Associations)-1][0];
+        }
+        
+        $this->RegisterProfileBoolean($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, 0);
+        
+        foreach($Associations as $Association) {
+            IPS_SetVariableProfileAssociation($Name, $Association[0], $Association[1], $Association[2], $Association[3]);
+        }
+        
     }
 
     protected function RegisterTimer($Name, $Interval, $Script)
