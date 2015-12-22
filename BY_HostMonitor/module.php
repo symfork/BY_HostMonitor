@@ -91,7 +91,7 @@ class HostMonitor extends IPSModule
 						}
 				}
     }
-    
+
     public function Benachrichtigung()
     {
 				$this->SetTimerInterval("OfflineBenachrichtigung", 0);
@@ -134,7 +134,7 @@ class HostMonitor extends IPSModule
         		$SkriptID = $this->ReadPropertyString("EigenesSkriptID");
         		if (($SkriptID != "") AND (@IPS_ScriptExists($SkriptID) === true))
         		{
-        				IPS_RunScriptEx($SkriptID, array("HMON_Hostname" => $Hostname, "HMON_Adresse" => $Hostadresse, "HMON_Text" => $BenachrichtigungsText, "HMON_Zeit" => $Hostname));
+        				IPS_RunScriptEx($SkriptID, array("HMON_Hostname" => $Hostname, "HMON_Adresse" => $Hostadresse, "HMON_Text" => $Text, "HMON_Zeit" => $LastOnlineTimeDiffSEK));
         		}		
         }
     }
