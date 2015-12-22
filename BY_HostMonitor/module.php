@@ -107,6 +107,7 @@ class HostMonitor extends IPSModule
 				$search = array("§HOST", "§ADRESSE", "§ZEITSEK", "§ZEITMIN", "§ZEITSTD", "§ZEITTAGE");
 				$replace = array($Hostname, $Hostadresse, $LastOnlineTimeDiffSEK, $LastOnlineTimeDiffMIN, $LastOnlineTimeDiffSTD, $LastOnlineTimeDiffTAGE);
 				$Text = str_replace($search, $replace, $BenachrichtigungsText);
+				$Text = str_replace('§', '', $Text);
 				
 				//PUSH-NACHRICHT
 				if ($this->ReadPropertyBoolean("PushMsgAktiv") == true)
@@ -134,7 +135,7 @@ class HostMonitor extends IPSModule
         		$SkriptID = $this->ReadPropertyString("EigenesSkriptID");
         		if (($SkriptID != "") AND (@IPS_ScriptExists($SkriptID) === true))
         		{
-        				IPS_RunScriptEx($SkriptID, array("HMON_Hostname" => $Hostname, "HMON_Adresse" => $Hostadresse, "HMON_Text" => $Text, "HMON_Zeit" => $LastOnlineTimeDiffSEK));
+        				IPS_RunScriptEx($SkriptID, array("HMON_Hostname" => $Hostname, "HMON_Adresse" => $Hostadresse, "HMON_Text" => $Text, "HMON_Zeit" => $Hostname));
         		}		
         }
     }

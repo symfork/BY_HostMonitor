@@ -33,7 +33,7 @@ zur Verfügung (siehe Beispiel-Skript).
 #### Beispiel-Skript für eigene Aktion
 ```php
 <?
-IPS_LogMessage("HostMonitor", $_IPS['Text']); // Schreibt den Text ins IPS-Log (zu sehen im Meldungen-Fenster in der IPS-Console)
+IPS_LogMessage("HostMonitor", $_IPS['HMON_Text']); // Schreibt den Text ins IPS-Log (zu sehen im Meldungen-Fenster in der IPS-Console)
 Enigma2BY_SendMsg($Enigma2BYinstanzID, $_IPS['HMON_Text'], 3, 10); // Zeigt 10 Sekunden lang eine Alarm-Nachricht über einen Enigma2-Receiver an
 ?>
 ```
