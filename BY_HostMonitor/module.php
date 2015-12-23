@@ -9,6 +9,7 @@ class HostMonitor extends IPSModule
         
         //These lines are parsed on Symcon Startup or Instance creation
         //You cannot use variables here. Just static values.
+        $this->SetStatus(204);
         $this->RegisterPropertyString("HostName", "");
         $this->RegisterPropertyString("HostAdresse", "");
         $this->RegisterPropertyInteger("Intervall", 60);
@@ -84,6 +85,10 @@ class HostMonitor extends IPSModule
         		
         		//Update
         		$this->Update();
+      	}
+      	else
+      	{
+      			$this->SetStatus(204);
       	}
     }
 

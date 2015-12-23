@@ -2,7 +2,7 @@
   "elements":
   [
 
-    { "type": "Label", "label": "####### HostMonitor v1.0 (23.12.2015 XX.XXUhr) #######" },
+    { "type": "Label", "label": "####### HostMonitor v1.0 (23.12.2015 20.50Uhr) #######" },
     { "type": "ValidationTextBox", "name": "HostName", "caption": "Host-Name" },
     { "type": "ValidationTextBox", "name": "HostAdresse", "caption": "Host-IP/URL" },
     { "type": "CheckBox", "name": "LoggingAktiv", "caption": "Logging der Status-Variable" },
@@ -37,6 +37,7 @@
     [
         { "code": 201, "icon": "error", "caption": "Fehler - Für Push Nachrichten muss eine WebFront-Instanz ausgewählt werden!" },
         { "code": 202, "icon": "error", "caption": "Fehler - Für EMail Nachrichten muss eine EMail-Instanz ausgewählt werden!" },
-        { "code": 203, "icon": "error", "caption": "Fehler - Für eine eigene Aktion muss ein Skript ausgewählt werden!" }
+        { "code": 203, "icon": "error", "caption": "Fehler - Für eine eigene Aktion muss ein Skript ausgewählt werden!" },
+        { "code": 204, "icon": "error", "caption": "Fehler - Bitte Hostnamen und Hostadresse eintragen!" }
     ]
 }
