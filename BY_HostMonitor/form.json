@@ -32,5 +32,11 @@
     { "type": "Button", "label": "Update", "onClick": "HMON_Update($id);" },
     { "type": "Button", "label": "Test-Benachrichtigung", "onClick": "HMON_Benachrichtigung($id);" }
 
-  ]
+  ],
+  "status":
+    [
+        { "code": 201, "icon": "error", "caption": "Fehler - Für Push Nachrichten muss eine WebFront-Instanz ausgewählt werden!" },
+        { "code": 202, "icon": "error", "caption": "Fehler - Für EMail Nachrichten muss eine EMail-Instanz ausgewählt werden!" },
+        { "code": 203, "icon": "error", "caption": "Fehler - Für eine eigene Aktion muss ein Skript ausgewählt werden!" }
+    ]
 }

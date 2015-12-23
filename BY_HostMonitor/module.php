@@ -21,14 +21,14 @@ class HostMonitor extends IPSModule
         $this->RegisterPropertyBoolean("PushMsgAktiv", false);
         $this->RegisterPropertyBoolean("EMailMsgAktiv", false);
         $this->RegisterPropertyBoolean("EigenesSkriptAktiv", false);
-        $this->RegisterTimer("Update", 0, 'HMON_Update($_IPS[\'TARGET\']);');
-        $this->RegisterTimer("OfflineBenachrichtigung", 0, 'HMON_Benachrichtigung($_IPS[\'TARGET\']);');
+        $this->RegisterTimer("TimerHMONupdate", 0, 'HMON_Update($_IPS[\'TARGET\']);');
+        $this->RegisterTimer("TimerHMONofflineBenachrichtigung", 0, 'HMON_Benachrichtigung($_IPS[\'TARGET\']);');
     }
 
     public function Destroy()
     {
-        $this->UnregisterTimer("Update");
-        $this->UnregisterTimer("OfflineBenachrichtigung");
+        $this->UnregisterTimer("TimerHMONupdate");
+        $this->UnregisterTimer("TimerHMONofflineBenachrichtigung");
         
         //Never delete this line!
         parent::Destroy();
@@ -48,14 +48,17 @@ class HostMonitor extends IPSModule
         if (($this->ReadPropertyBoolean("PushMsgAktiv") === true) AND ($this->ReadPropertyInteger("WebFrontInstanceID") == ""))
         {
         		echo "FEHLER - Damit die Push-Benachrichtigung verwendet werdet kann, muss eine WebFront-Instanz ausgewählt werden!";
+        		$this->SetStatus(201);
       	}
       	if (($this->ReadPropertyBoolean("EMailMsgAktiv") === true) AND ($this->ReadPropertyInteger("SmtpInstanceID") == ""))
         {
         		echo "FEHLER - Damit die EMail-Benachrichtigung verwendet werdet kann, muss eine SMTP-Instanz ausgewählt werden!";
+        		$this->SetStatus(202);
       	}
       	if (($this->ReadPropertyBoolean("EigenesSkriptAktiv") === true) AND ($this->ReadPropertyInteger("EigenesSkriptID") == ""))
         {
         		echo "FEHLER - Damit die Skript-Benachrichtigung verwendet werdet kann, muss ein Skript ausgewählt werden!";
+        		$this->SetStatus(203);
       	}
 
         if (($this->ReadPropertyString("HostName") != "") AND ($this->ReadPropertyString("HostAdresse") != ""))
@@ -76,8 +79,8 @@ class HostMonitor extends IPSModule
 		        }
 		        
 		        //Timer erstellen
-        		$this->SetTimerInterval("Update", $this->ReadPropertyInteger("Intervall"));
-        		$this->SetTimerInterval("OfflineBenachrichtigung", 0);
+        		$this->SetTimerInterval("TimerHMONupdate", $this->ReadPropertyInteger("Intervall"));
+        		$this->SetTimerInterval("TimerHMONofflineBenachrichtigung", 0);
         		
         		//Update
         		$this->Update();
@@ -107,9 +110,9 @@ class HostMonitor extends IPSModule
 										if ($BenachrichtigungsTimer == 0)
 										{
 												$this->Benachrichtigung();
-												$this->SetTimerInterval("OfflineBenachrichtigung", 0);
+												$this->SetTimerInterval("TimerHMONofflineBenachrichtigung", 0);
 										}
-										$this->SetTimerInterval("OfflineBenachrichtigung", $BenachrichtigungsTimer);
+										$this->SetTimerInterval("TimerHMONofflineBenachrichtigung", $BenachrichtigungsTimer);
 								}
 						}
 				}
@@ -117,7 +120,7 @@ class HostMonitor extends IPSModule
 
     public function Benachrichtigung()
     {
-				$this->SetTimerInterval("OfflineBenachrichtigung", 0);
+				$this->SetTimerInterval("TimerHMONofflineBenachrichtigung", 0);
 				$BenachrichtigungsText = $this->ReadPropertyString("BenachrichtigungsText");
 				$Hostname = $this->ReadPropertyString("HostName");
 				$Hostadresse = $this->ReadPropertyString("HostAdresse");
