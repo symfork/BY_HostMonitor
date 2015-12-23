@@ -120,7 +120,7 @@ class HostMonitor extends IPSModule
 								// OK-Benachrichtung senden, wenn vorher Offline-Benachrichtung gesendet wurde > wenn Einstellung aktiv
 								if ((GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === true) AND ($this->ReadPropertyBoolean("OnlineBenachrichtigung") === true))
 								{
-										$this->Benachrichtigung("online");
+										$this->Benachrichtigung(true);
 								}
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
 						}
@@ -131,7 +131,7 @@ class HostMonitor extends IPSModule
 										$BenachrichtigungsTimer = $this->ReadPropertyInteger("AlarmZeitDiff");
 										if ($BenachrichtigungsTimer == 0)
 										{
-												$this->Benachrichtigung("offline");
+												$this->Benachrichtigung(false);
 												$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
 										}
 										$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", $BenachrichtigungsTimer);
@@ -142,20 +142,21 @@ class HostMonitor extends IPSModule
 
     public function Benachrichtigung($status)
     {
-				if ($status == "offline")
+				if ($status == false)
 				{
 						$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
 						$this->SetValueBoolean("HostBenachrichtigungsFlag", true);
 						$BenachrichtigungsText = $this->ReadPropertyString("BenachrichtigungsTextOffline");
+						$Hoststatus = "offline";
 				}
-				elseif ($status == "online")
+				elseif ($status == true)
 				{
 						$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
 						$BenachrichtigungsText = $this->ReadPropertyString("BenachrichtigungsTextOnline");
+						$Hoststatus = "online";
 				}
 				$Hostname = $this->ReadPropertyString("HostName");
 				$Hostadresse = $this->ReadPropertyString("HostAdresse");
-				$Hoststatus = "offline";
 				$LastOnlineTimeDiffSEK = (int)(time() - GetValueInteger($this->GetIDForIdent("HostLastOnline")));
 				$LastOnlineTimeDiffMIN = (int)($LastOnlineTimeDiffSEK / 60);
 				$LastOnlineTimeDiffSTD = round($LastOnlineTimeDiffMIN / 60, 2);

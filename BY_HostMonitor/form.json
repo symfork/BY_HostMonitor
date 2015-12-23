@@ -33,7 +33,7 @@
   [
 
     { "type": "Button", "label": "Update", "onClick": "HMON_Update($id);" },
-    { "type": "Button", "label": "Test-Benachrichtigung", "onClick": "HMON_Benachrichtigung($id, \"offline\");" }
+    { "type": "Button", "label": "Test-Benachrichtigung", "onClick": "HMON_Benachrichtigung($id, false);" }
 
   ],
   "status":
