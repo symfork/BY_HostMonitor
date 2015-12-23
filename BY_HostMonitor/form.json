@@ -5,7 +5,7 @@
     { "type": "Label", "label": "####### HostMonitor v1.0 (23.12.2015 XX.XXUhr) #######" },
     { "type": "ValidationTextBox", "name": "HostName", "caption": "Host-Name" },
     { "type": "ValidationTextBox", "name": "HostAdresse", "caption": "Host-IP/URL" },
-    { "type": "CheckBox", "name": "LoggingAktiv", "caption": "Log Status" },
+    { "type": "CheckBox", "name": "LoggingAktiv", "caption": "Logging der Status-Variable" },
     { "type": "Label", "label": "Intervall für die Prüfung des Host:" },
     { "type": "IntervalBox", "name": "Intervall", "caption": "Sekunden" },
     { "type": "Label", "label": "Nach X Sekunden ohne Ping wird eine Benachrichtigung über die aktivierten Wege ausgelöst (0 = sofortige Benachrichtigung):" },

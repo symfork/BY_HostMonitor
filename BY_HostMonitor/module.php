@@ -62,7 +62,8 @@ class HostMonitor extends IPSModule
         {
 		        //Variablen erstellen
 		        $this->RegisterVariableBoolean("HostStatus", "Host - Status", "HMON.OfflineOnline");
-		        $this->RegisterVariableBoolean("HostBenachrichtigungsFlag", "Benachrichtigung-Tmp");
+		        $this->RegisterVariableBoolean("HostBenachrichtigungsFlag", "Tmp");
+		        IPS_SetHidden($this->GetIDForIdent("HostBenachrichtigungsFlag"), true);
 		        $this->RegisterVariableInteger("HostLastOnline", "Host - Zuletzt online", "~UnixTimestamp");
 		        IPS_SetIcon($this->GetIDForIdent("HostLastOnline"), "Calendar");
 		        
@@ -95,13 +96,19 @@ class HostMonitor extends IPSModule
 						{
 								$HostLastOnlineTime = time();
 								$this->SetValueInteger("HostLastOnline", $HostLastOnlineTime);
+								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
 						}
 						else
 						{
 								if (GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === false)
 								{
 										$this->SetValueBoolean("HostBenachrichtigungsFlag", true);
-										$this->SetTimerInterval("OfflineBenachrichtigung", $this->ReadPropertyInteger("AlarmZeitDiff"));
+										$BenachrichtigungsTimer = $this->ReadPropertyInteger("AlarmZeitDiff");
+										if ($BenachrichtigungsTimer == 0)
+										{
+												$BenachrichtigungsTimer = 1;
+										}
+										$this->SetTimerInterval("OfflineBenachrichtigung", $BenachrichtigungsTimer);
 								}
 						}
 				}
