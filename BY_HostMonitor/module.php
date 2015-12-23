@@ -120,7 +120,7 @@ class HostMonitor extends IPSModule
 								// OK-Benachrichtung senden, wenn vorher Offline-Benachrichtung gesendet wurde > wenn Einstellung aktiv
 								if ((GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === true) AND ($this->ReadPropertyBoolean("OnlineBenachrichtigung") === true))
 								{
-										$this->Benachrichtigung(true);
+										$this->Benachrichtigung(true, true);
 								}
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
 						}
@@ -131,7 +131,7 @@ class HostMonitor extends IPSModule
 										$BenachrichtigungsTimer = $this->ReadPropertyInteger("AlarmZeitDiff");
 										if ($BenachrichtigungsTimer == 0)
 										{
-												$this->Benachrichtigung(false);
+												$this->Benachrichtigung(false, true);
 												$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
 										}
 										$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", $BenachrichtigungsTimer);
@@ -140,20 +140,26 @@ class HostMonitor extends IPSModule
 				}
     }
 
-    public function Benachrichtigung($status)
+    public function Benachrichtigung($status, $live)
     {
-				if ($status == false)
+				if ($status == false) 
 				{
 						$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
-						$this->SetValueBoolean("HostBenachrichtigungsFlag", true);
 						$BenachrichtigungsText = $this->ReadPropertyString("BenachrichtigungsTextOffline");
 						$Hoststatus = "offline";
+						if ($live == true)
+						{
+								$this->SetValueBoolean("HostBenachrichtigungsFlag", true);
+						}
 				}
 				elseif ($status == true)
 				{
-						$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
 						$BenachrichtigungsText = $this->ReadPropertyString("BenachrichtigungsTextOnline");
 						$Hoststatus = "online";
+						if ($live == true)
+						{
+								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
+						}
 				}
 				$Hostname = $this->ReadPropertyString("HostName");
 				$Hostadresse = $this->ReadPropertyString("HostAdresse");
