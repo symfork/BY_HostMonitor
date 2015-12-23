@@ -106,7 +106,8 @@ class HostMonitor extends IPSModule
 										$BenachrichtigungsTimer = $this->ReadPropertyInteger("AlarmZeitDiff");
 										if ($BenachrichtigungsTimer == 0)
 										{
-												$BenachrichtigungsTimer = 1;
+												$this->Benachrichtigung();
+												$this->SetTimerInterval("OfflineBenachrichtigung", 0);
 										}
 										$this->SetTimerInterval("OfflineBenachrichtigung", $BenachrichtigungsTimer);
 								}
