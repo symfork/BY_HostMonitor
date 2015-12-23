@@ -63,6 +63,8 @@ class HostMonitor extends IPSModule
 
         if (($this->ReadPropertyString("HostName") != "") AND ($this->ReadPropertyString("HostAdresse") != ""))
         {
+		        $this->SetStatus(102);
+		        		        
 		        //Variablen erstellen
 		        $this->RegisterVariableBoolean("HostStatus", "Host - Status", "HMON.OfflineOnline");
 		        $this->RegisterVariableBoolean("HostBenachrichtigungsFlag", "Tmp");
