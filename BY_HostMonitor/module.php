@@ -45,26 +45,10 @@ class HostMonitor extends IPSModule
                                              Array(true, "Online",  "", 0x00FF00)
         ));
         
-        if (($this->ReadPropertyBoolean("PushMsgAktiv") === true) AND ($this->ReadPropertyInteger("WebFrontInstanceID") == ""))
-        {
-        		echo "FEHLER - Damit die Push-Benachrichtigung verwendet werdet kann, muss eine WebFront-Instanz ausgewählt werden!";
-        		$this->SetStatus(201);
-      	}
-      	if (($this->ReadPropertyBoolean("EMailMsgAktiv") === true) AND ($this->ReadPropertyInteger("SmtpInstanceID") == ""))
-        {
-        		echo "FEHLER - Damit die EMail-Benachrichtigung verwendet werdet kann, muss eine SMTP-Instanz ausgewählt werden!";
-        		$this->SetStatus(202);
-      	}
-      	if (($this->ReadPropertyBoolean("EigenesSkriptAktiv") === true) AND ($this->ReadPropertyInteger("EigenesSkriptID") == ""))
-        {
-        		echo "FEHLER - Damit die Skript-Benachrichtigung verwendet werdet kann, muss ein Skript ausgewählt werden!";
-        		$this->SetStatus(203);
-      	}
-
         if (($this->ReadPropertyString("HostName") != "") AND ($this->ReadPropertyString("HostAdresse") != ""))
         {
+		        //Status setzen
 		        $this->SetStatus(102);
-		        		        
 		        //Variablen erstellen
 		        $this->RegisterVariableBoolean("HostStatus", "Host - Status", "HMON.OfflineOnline");
 		        $this->RegisterVariableBoolean("HostBenachrichtigungsFlag", "Tmp");
@@ -90,6 +74,23 @@ class HostMonitor extends IPSModule
       	else
       	{
       			$this->SetStatus(204);
+      	}
+      	
+      	//Fehlerhafte Konfiguration melden
+      	if (($this->ReadPropertyBoolean("PushMsgAktiv") === true) AND ($this->ReadPropertyInteger("WebFrontInstanceID") == ""))
+        {
+        		echo "FEHLER - Damit die Push-Benachrichtigung verwendet werdet kann, muss eine WebFront-Instanz ausgewählt werden!";
+        		$this->SetStatus(201);
+      	}
+      	if (($this->ReadPropertyBoolean("EMailMsgAktiv") === true) AND ($this->ReadPropertyInteger("SmtpInstanceID") == ""))
+        {
+        		echo "FEHLER - Damit die EMail-Benachrichtigung verwendet werdet kann, muss eine SMTP-Instanz ausgewählt werden!";
+        		$this->SetStatus(202);
+      	}
+      	if (($this->ReadPropertyBoolean("EigenesSkriptAktiv") === true) AND ($this->ReadPropertyInteger("EigenesSkriptID") == ""))
+        {
+        		echo "FEHLER - Damit die Skript-Benachrichtigung verwendet werdet kann, muss ein Skript ausgewählt werden!";
+        		$this->SetStatus(203);
       	}
     }
 
