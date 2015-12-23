@@ -2,7 +2,7 @@
   "elements":
   [
 
-    { "type": "Label", "label": "####### HostMonitor v1.0 (23.12.2015 23.30Uhr) #######" },
+    { "type": "Label", "label": "####### HostMonitor v1.0 (24.12.2015 00.15Uhr) #######" },
     { "type": "ValidationTextBox", "name": "HostName", "caption": "Host-Name" },
     { "type": "ValidationTextBox", "name": "HostAdresse", "caption": "Host-IP/URL" },
     { "type": "CheckBox", "name": "LoggingAktiv", "caption": "Logging der Status-Variable" },
@@ -11,7 +11,7 @@
     { "type": "Label", "label": "Nach X Sekunden ohne Ping wird eine Benachrichtigung über die aktivierten Wege ausgelöst (0 = sofortige Benachrichtigung):" },
     { "type": "ValidationTextBox", "name": "AlarmZeitDiff", "caption": "Sek. bis Benachr." },
     { "type": "Label", "label": "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" },
-    { "type": "Label", "label": "Text der als Benachrichtigung gesendet wird (Es stehen verschiedene Variablen zur Verfügung). Wird nichts aktiviert, findet keine Benachrichtigung statt!" },
+    { "type": "Label", "label": "Text der als Benachrichtigung gesendet wird (es stehen verschiedene Variablen zur Verfügung). Wird nichts aktiviert, findet keine Benachrichtigung statt!" },
     { "type": "Label", "label": "§HOST = Hostname, §ADRESSE = Hostadresse, §ZEITSEK = Sekunden offline/online, §ZEITMIN = Minuten offline/online, §ZEITSTD = Stunden offline/online, §ZEITTAGE = Tage offline/online" },
     { "type": "CheckBox", "name": "OfflineBenachrichtigung", "caption": "Offline-Benachrichtigung (Benachrichtigung, wenn ein Gerät nicht mehr erreichbar ist)" },
     { "type": "ValidationTextBox", "name": "BenachrichtigungsTextOffline", "caption": "Benachr.-Text (offline)" },

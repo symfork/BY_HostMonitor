@@ -66,6 +66,12 @@ class HostMonitor extends IPSModule
 		        		AC_SetLoggingStatus($ArchiveHandlerID, $this->GetIDForIdent("HostStatus"), true);
 		        		IPS_ApplyChanges($ArchiveHandlerID);
 		        }
+		        else
+		        {
+		        		$ArchiveHandlerID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
+		        		AC_SetLoggingStatus($ArchiveHandlerID, $this->GetIDForIdent("HostStatus"), false);
+		        		IPS_ApplyChanges($ArchiveHandlerID);
+		        }
 		        
 		        //Timer erstellen
         		$this->SetTimerInterval("HMON_UpdateTimer", $this->ReadPropertyInteger("Intervall"));
