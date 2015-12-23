@@ -13,22 +13,25 @@ class HostMonitor extends IPSModule
         $this->RegisterPropertyString("HostAdresse", "");
         $this->RegisterPropertyInteger("Intervall", 60);
         $this->RegisterPropertyInteger("AlarmZeitDiff", 0);
-        $this->RegisterPropertyString("BenachrichtigungsText", "Der Host -§HOST- mit Adresse -§ADRESSE- ist seit §ZEITMIN Minuten nicht mehr erreichbar!");
+        $this->RegisterPropertyString("BenachrichtigungsTextOffline", "Der Host -§HOST- mit Adresse -§ADRESSE- ist seit §ZEITMIN Minuten nicht mehr erreichbar!");
+        $this->RegisterPropertyString("BenachrichtigungsTextOnline", "Der Host -§HOST- mit Adresse -§ADRESSE- war §ZEITMIN Minuten offline und ist jetzt wieder erreichbar!");
         $this->RegisterPropertyString("WebFrontInstanceID", "");
         $this->RegisterPropertyString("SmtpInstanceID", "");
         $this->RegisterPropertyString("EigenesSkriptID", "");
         $this->RegisterPropertyBoolean("LoggingAktiv", false);
+        $this->RegisterPropertyBoolean("OfflineBenachrichtigung", false);
+        $this->RegisterPropertyBoolean("OnlineBenachrichtigung", false);
         $this->RegisterPropertyBoolean("PushMsgAktiv", false);
         $this->RegisterPropertyBoolean("EMailMsgAktiv", false);
         $this->RegisterPropertyBoolean("EigenesSkriptAktiv", false);
-        $this->RegisterTimer("TimerHMONupdate", 0, 'HMON_Update($_IPS[\'TARGET\']);');
-        $this->RegisterTimer("TimerHMONofflineBenachrichtigung", 0, 'HMON_Benachrichtigung($_IPS[\'TARGET\']);');
+        $this->RegisterTimer("HMON_UpdateTimer", 0, 'HMON_Update($_IPS[\'TARGET\']);');
+        $this->RegisterTimer("HMON_BenachrichtigungOfflineTimer", 0, 'HMON_BenachrichtigungOffline($_IPS[\'TARGET\']);');
     }
 
     public function Destroy()
     {
-        $this->UnregisterTimer("TimerHMONupdate");
-        $this->UnregisterTimer("TimerHMONofflineBenachrichtigung");
+        $this->UnregisterTimer("HMON_UpdateTimer");
+        $this->UnregisterTimer("HMON_BenachrichtigungOfflineTimer");
         
         //Never delete this line!
         parent::Destroy();
@@ -65,8 +68,8 @@ class HostMonitor extends IPSModule
 		        }
 		        
 		        //Timer erstellen
-        		$this->SetTimerInterval("TimerHMONupdate", $this->ReadPropertyInteger("Intervall"));
-        		$this->SetTimerInterval("TimerHMONofflineBenachrichtigung", 0);
+        		$this->SetTimerInterval("HMON_UpdateTimer", $this->ReadPropertyInteger("Intervall"));
+        		$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
         		
         		//Update
         		$this->Update();
@@ -92,6 +95,14 @@ class HostMonitor extends IPSModule
         		echo "FEHLER - Damit die Skript-Benachrichtigung verwendet werdet kann, muss ein Skript ausgewählt werden!";
         		$this->SetStatus(203);
       	}
+      	if ((($this->ReadPropertyBoolean("PushMsgAktiv") === false) AND ($this->ReadPropertyBoolean("EMailMsgAktiv") === false) AND ($this->ReadPropertyBoolean("EigenesSkriptAktiv") === false)) AND (($this->ReadPropertyBoolean("OfflineBenachrichtigung") === true)))
+      	{
+      			echo "ACHTUNG - Damit eine Benachrichtigung erfolgen kann, muss eine Benachrichtigungs-Methode ausgewählt werden!";
+      	}
+      	if (($this->ReadPropertyBoolean("OfflineBenachrichtigung") === false) AND ($this->ReadPropertyBoolean("OnlineBenachrichtigung") === true))
+      	{
+      			echo "ACHTUNG - Damit eine Online-Benachrichtigung erfolgen kann, muss zuvor eine Offline-Benachrichtigung versendet worden sein!";
+      	}
     }
 
     public function Update()
@@ -106,31 +117,45 @@ class HostMonitor extends IPSModule
 						{
 								$HostLastOnlineTime = time();
 								$this->SetValueInteger("HostLastOnline", $HostLastOnlineTime);
+								// OK-Benachrichtung senden, wenn vorher Offline-Benachrichtung gesendet wurde > wenn Einstellung aktiv
+								if ((GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === true) AND ($this->ReadPropertyBoolean("OnlineBenachrichtigung") === true))
+								{
+										$this->Benachrichtigung("online");
+								}
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
 						}
 						else
 						{
-								if (GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === false)
+								if ((GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === false) AND ($this->ReadPropertyBoolean("OfflineBenachrichtigung") === true))
 								{
-										$this->SetValueBoolean("HostBenachrichtigungsFlag", true);
 										$BenachrichtigungsTimer = $this->ReadPropertyInteger("AlarmZeitDiff");
 										if ($BenachrichtigungsTimer == 0)
 										{
-												$this->Benachrichtigung();
-												$this->SetTimerInterval("TimerHMONofflineBenachrichtigung", 0);
+												$this->Benachrichtigung("offline");
+												$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
 										}
-										$this->SetTimerInterval("TimerHMONofflineBenachrichtigung", $BenachrichtigungsTimer);
+										$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", $BenachrichtigungsTimer);
 								}
 						}
 				}
     }
 
-    public function Benachrichtigung()
+    public function Benachrichtigung($status)
     {
-				$this->SetTimerInterval("TimerHMONofflineBenachrichtigung", 0);
-				$BenachrichtigungsText = $this->ReadPropertyString("BenachrichtigungsText");
+				if ($status == "offline")
+				{
+						$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
+						$this->SetValueBoolean("HostBenachrichtigungsFlag", true);
+						$BenachrichtigungsText = $this->ReadPropertyString("BenachrichtigungsTextOffline");
+				}
+				elseif ($status == "online")
+				{
+						$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
+						$BenachrichtigungsText = $this->ReadPropertyString("BenachrichtigungsTextOnline");
+				}
 				$Hostname = $this->ReadPropertyString("HostName");
 				$Hostadresse = $this->ReadPropertyString("HostAdresse");
+				$Hoststatus = "offline";
 				$LastOnlineTimeDiffSEK = (int)(time() - GetValueInteger($this->GetIDForIdent("HostLastOnline")));
 				$LastOnlineTimeDiffMIN = (int)($LastOnlineTimeDiffSEK / 60);
 				$LastOnlineTimeDiffSTD = round($LastOnlineTimeDiffMIN / 60, 2);
@@ -168,7 +193,7 @@ class HostMonitor extends IPSModule
         		$SkriptID = $this->ReadPropertyString("EigenesSkriptID");
         		if (($SkriptID != "") AND (@IPS_ScriptExists($SkriptID) === true))
         		{
-        				IPS_RunScriptEx($SkriptID, array("HMON_Hostname" => $Hostname, "HMON_Adresse" => $Hostadresse, "HMON_Text" => $Text, "HMON_Zeit" => $Hostname));
+        				IPS_RunScriptEx($SkriptID, array("HMON_Hostname" => $Hostname, "HMON_Adresse" => $Hostadresse, "HMON_Status" => $Hoststatus, "HMON_Text" => $Text, "HMON_Zeit" => $Hostname));
         		}		
         }
     }
