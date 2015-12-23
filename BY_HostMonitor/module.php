@@ -12,11 +12,12 @@ class HostMonitor extends IPSModule
         $this->RegisterPropertyString("HostName", "");
         $this->RegisterPropertyString("HostAdresse", "");
         $this->RegisterPropertyInteger("Intervall", 60);
-        $this->RegisterPropertyInteger("AlarmZeit", 0);
+        $this->RegisterPropertyInteger("AlarmZeitDiff", 0);
         $this->RegisterPropertyString("BenachrichtigungsText", "Der Host -§HOST- mit Adresse -§ADRESSE- ist seit §ZEITMIN Minuten nicht mehr erreichbar!");
         $this->RegisterPropertyString("WebFrontInstanceID", "");
         $this->RegisterPropertyString("SmtpInstanceID", "");
         $this->RegisterPropertyString("EigenesSkriptID", "");
+        $this->RegisterPropertyBoolean("LoggingAktiv", false);
         $this->RegisterPropertyBoolean("PushMsgAktiv", false);
         $this->RegisterPropertyBoolean("EMailMsgAktiv", false);
         $this->RegisterPropertyBoolean("EigenesSkriptAktiv", false);
@@ -61,7 +62,17 @@ class HostMonitor extends IPSModule
         {
 		        //Variablen erstellen
 		        $this->RegisterVariableBoolean("HostStatus", "Host - Status", "HMON.OfflineOnline");
+		        $this->RegisterVariableBoolean("HostBenachrichtigungsFlag", "Benachrichtigung-Tmp");
 		        $this->RegisterVariableInteger("HostLastOnline", "Host - Zuletzt online", "~UnixTimestamp");
+		        IPS_SetIcon($this->GetIDForIdent("HostLastOnline"), "Calendar");
+		        
+		        //Logging aktivieren
+		        if ($this->ReadPropertyBoolean("LoggingAktiv") === true)
+		        {
+		        		$ArchiveHandlerID = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}')[0];
+		        		AC_SetLoggingStatus($ArchiveHandlerID, $this->GetIDForIdent("HostStatus"), true);
+		        		IPS_ApplyChanges($ArchiveHandlerID);
+		        }
 		        
 		        //Timer erstellen
         		$this->SetTimerInterval("Update", $this->ReadPropertyInteger("Intervall"));
@@ -87,7 +98,11 @@ class HostMonitor extends IPSModule
 						}
 						else
 						{
-								$this->SetTimerInterval("OfflineBenachrichtigung", $this->ReadPropertyInteger("AlarmZeit"));
+								if (GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === false)
+								{
+										$this->SetValueBoolean("HostBenachrichtigungsFlag", true);
+										$this->SetTimerInterval("OfflineBenachrichtigung", $this->ReadPropertyInteger("AlarmZeitDiff"));
+								}
 						}
 				}
     }
@@ -107,7 +122,7 @@ class HostMonitor extends IPSModule
 				$search = array("§HOST", "§ADRESSE", "§ZEITSEK", "§ZEITMIN", "§ZEITSTD", "§ZEITTAGE");
 				$replace = array($Hostname, $Hostadresse, $LastOnlineTimeDiffSEK, $LastOnlineTimeDiffMIN, $LastOnlineTimeDiffSTD, $LastOnlineTimeDiffTAGE);
 				$Text = str_replace($search, $replace, $BenachrichtigungsText);
-				$Text = str_replace('§', '', $Text);
+				$Text = str_replace('Â', '', $Text);
 				
 				//PUSH-NACHRICHT
 				if ($this->ReadPropertyBoolean("PushMsgAktiv") == true)
@@ -139,7 +154,7 @@ class HostMonitor extends IPSModule
         		}		
         }
     }
-    
+
     private function SetValueBoolean($Ident, $Value)
     {
         $ID = $this->GetIDForIdent($Ident);
@@ -194,47 +209,6 @@ class HostMonitor extends IPSModule
         
     }
 
-    protected function RegisterTimer($Name, $Interval, $Script)
-    {
-        $id = @IPS_GetObjectIDByIdent($Name, $this->InstanceID);
-        if ($id === false)
-            $id = 0;
-
-
-        if ($id > 0)
-        {
-            if (!IPS_EventExists($id))
-                throw new Exception("Ident with name " . $Name . " is used for wrong object type", E_USER_WARNING);
-
-            if (IPS_GetEvent($id)['EventType'] <> 1)
-            {
-                IPS_DeleteEvent($id);
-                $id = 0;
-            }
-        }
-
-        if ($id == 0)
-        {
-            $id = IPS_CreateEvent(1);
-            IPS_SetParent($id, $this->InstanceID);
-            IPS_SetIdent($id, $Name);
-        }
-        IPS_SetName($id, $Name);
-        IPS_SetHidden($id, true);
-        IPS_SetEventScript($id, $Script);
-        if ($Interval > 0)
-        {
-            IPS_SetEventCyclic($id, 0, 0, 0, 0, 1, $Interval);
-
-            IPS_SetEventActive($id, true);
-        } else
-        {
-            IPS_SetEventCyclic($id, 0, 0, 0, 0, 1, 1);
-
-            IPS_SetEventActive($id, false);
-        }
-    }
-
     protected function UnregisterTimer($Name)
     {
         $id = @IPS_GetObjectIDByIdent($Name, $this->InstanceID);
@@ -243,30 +217,6 @@ class HostMonitor extends IPSModule
             if (!IPS_EventExists($id))
                 throw new Exception('Timer not present', E_USER_NOTICE);
             IPS_DeleteEvent($id);
-        }
-    }
-
-    protected function SetTimerInterval($Name, $Interval)
-    {
-        $id = @IPS_GetObjectIDByIdent($Name, $this->InstanceID);
-        if ($id === false)
-            throw new Exception('Timer not present', E_USER_WARNING);
-        if (!IPS_EventExists($id))
-            throw new Exception('Timer not present', E_USER_WARNING);
-
-        $Event = IPS_GetEvent($id);
-
-        if ($Interval < 1)
-        {
-            if ($Event['EventActive'])
-                IPS_SetEventActive($id, false);
-        }
-        else
-        {
-            if ($Event['CyclicTimeValue'] <> $Interval)
-                IPS_SetEventCyclic($id, 0, 0, 0, 0, 1, $Interval);
-            if (!$Event['EventActive'])
-                IPS_SetEventActive($id, true);
         }
     }
 }
