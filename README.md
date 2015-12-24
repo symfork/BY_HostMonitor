@@ -29,8 +29,9 @@ Ebenfalls kann man ein eigenes Skript festlegen, welches zur Benachrichtigung ve
 des Host, nach eingestellter Zeit oder sofort, ausgeführt. Hier kann man dann Benachrichtigungen über Sonos, Enigma2-Nachricht, SMS, ... einrichten.
 Für eigene Aktionen stehen einem im ausgewählten Skript die folgenden Variablen zur Verfügung:
 ```
-$_IPS["HMON_Hostname"] (Name des Host), $_IPS["HMON_Adresse"] (Adresse des Host), $_IPS["HMON_Hoststatus"] (online/offline),
-$_IPS["HMON_Text"] (Text als String) und $_IPS["HMON_Zeit"] (Sekunden seit letzter Erreichbarkeit)
+$_IPS["HMON_Hostname"] (Name des Host), $_IPS["HMON_Adresse"] (Adresse des Host),
+$_IPS["HMON_Hoststatus"] (online/offline), $_IPS["HMON_Text"] (Text als String),
+$_IPS["HMON_Zeit"] (Sekunden seit letzter Erreichbarkeit)
 ```
 
 #### Beispiel-Skript für eigene Aktion
