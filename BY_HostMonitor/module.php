@@ -16,9 +16,9 @@ class HostMonitor extends IPSModule
         $this->RegisterPropertyInteger("AlarmZeitDiff", 0);
         $this->RegisterPropertyString("BenachrichtigungsTextOffline", "Der Host -§HOST- mit Adresse -§ADRESSE- ist seit §ZEITMIN Minuten nicht mehr erreichbar!");
         $this->RegisterPropertyString("BenachrichtigungsTextOnline", "Der Host -§HOST- mit Adresse -§ADRESSE- war §ZEITMIN Minuten offline und ist jetzt wieder erreichbar!");
-        $this->RegisterPropertyString("WebFrontInstanceID", "");
-        $this->RegisterPropertyString("SmtpInstanceID", "");
-        $this->RegisterPropertyString("EigenesSkriptID", "");
+        $this->RegisterPropertyInteger("WebFrontInstanceID", "");
+        $this->RegisterPropertyInteger("SmtpInstanceID", "");
+        $this->RegisterPropertyInteger("EigenesSkriptID", "");
         $this->RegisterPropertyBoolean("LoggingAktiv", false);
         $this->RegisterPropertyBoolean("OfflineBenachrichtigung", false);
         $this->RegisterPropertyBoolean("OnlineBenachrichtigung", false);
@@ -83,32 +83,29 @@ class HostMonitor extends IPSModule
       	}
       	else
       	{
-      			$this->SetStatus(204);
+      			$this->SetStatus(206);
       	}
       	
       	//Fehlerhafte Konfiguration melden
       	if (($this->ReadPropertyBoolean("PushMsgAktiv") === true) AND ($this->ReadPropertyInteger("WebFrontInstanceID") == ""))
         {
-        		echo "FEHLER - Damit die Push-Benachrichtigung verwendet werdet kann, muss eine WebFront-Instanz ausgewählt werden!";
         		$this->SetStatus(201);
       	}
       	if (($this->ReadPropertyBoolean("EMailMsgAktiv") === true) AND ($this->ReadPropertyInteger("SmtpInstanceID") == ""))
         {
-        		echo "FEHLER - Damit die EMail-Benachrichtigung verwendet werdet kann, muss eine SMTP-Instanz ausgewählt werden!";
         		$this->SetStatus(202);
       	}
       	if (($this->ReadPropertyBoolean("EigenesSkriptAktiv") === true) AND ($this->ReadPropertyInteger("EigenesSkriptID") == ""))
         {
-        		echo "FEHLER - Damit die Skript-Benachrichtigung verwendet werdet kann, muss ein Skript ausgewählt werden!";
         		$this->SetStatus(203);
       	}
       	if ((($this->ReadPropertyBoolean("PushMsgAktiv") === false) AND ($this->ReadPropertyBoolean("EMailMsgAktiv") === false) AND ($this->ReadPropertyBoolean("EigenesSkriptAktiv") === false)) AND (($this->ReadPropertyBoolean("OfflineBenachrichtigung") === true)))
       	{
-      			echo "ACHTUNG - Damit eine Benachrichtigung erfolgen kann, muss eine Benachrichtigungs-Methode ausgewählt werden!";
+      			$this->SetStatus(204);
       	}
       	if (($this->ReadPropertyBoolean("OfflineBenachrichtigung") === false) AND ($this->ReadPropertyBoolean("OnlineBenachrichtigung") === true))
       	{
-      			echo "ACHTUNG - Damit eine Online-Benachrichtigung erfolgen kann, muss zuvor eine Offline-Benachrichtigung versendet worden sein!";
+      			$this->SetStatus(205);
       	}
     }
 
@@ -185,7 +182,7 @@ class HostMonitor extends IPSModule
 				//PUSH-NACHRICHT
 				if ($this->ReadPropertyBoolean("PushMsgAktiv") == true)
         {
-        		$WFinstanzID = $this->ReadPropertyString("WebFrontInstanceID");
+        		$WFinstanzID = $this->ReadPropertyInteger("WebFrontInstanceID");
         		if (($WFinstanzID != "") AND (@IPS_InstanceExists($WFinstanzID) === true))
         		{
         				WFC_PushNotification($WFinstanzID, "HostMonitor", $Text, "", 0);
@@ -195,7 +192,7 @@ class HostMonitor extends IPSModule
         //EMAIL-NACHRICHT
         if ($this->ReadPropertyBoolean("EMailMsgAktiv") == true)
         {
-        		$SMTPinstanzID = $this->ReadPropertyString("SmtpInstanceID");
+        		$SMTPinstanzID = $this->ReadPropertyInteger("SmtpInstanceID");
         		if (($SMTPinstanzID != "") AND (@IPS_InstanceExists($SMTPinstanzID) === true))
         		{
         				SMTP_SendMail($SMTPinstanzID, "HostMonitor", $Text);
@@ -205,7 +202,7 @@ class HostMonitor extends IPSModule
         //EIGENE-AKTION
         if ($this->ReadPropertyBoolean("EigenesSkriptAktiv") == true)
         {
-        		$SkriptID = $this->ReadPropertyString("EigenesSkriptID");
+        		$SkriptID = $this->ReadPropertyInteger("EigenesSkriptID");
         		if (($SkriptID != "") AND (@IPS_ScriptExists($SkriptID) === true))
         		{
         				IPS_RunScriptEx($SkriptID, array("HMON_Name" => $Hostname, "HMON_Adresse" => $Hostadresse, "HMON_Status" => $Hoststatus, "HMON_Text" => $Text, "HMON_Zeit" => $LastOnlineTimeDiffSEK));
