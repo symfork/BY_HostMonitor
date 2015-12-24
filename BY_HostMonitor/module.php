@@ -16,9 +16,9 @@ class HostMonitor extends IPSModule
         $this->RegisterPropertyInteger("AlarmZeitDiff", 0);
         $this->RegisterPropertyString("BenachrichtigungsTextOffline", "Der Host -§HOST- mit Adresse -§ADRESSE- ist seit §ZEITMIN Minuten nicht mehr erreichbar!");
         $this->RegisterPropertyString("BenachrichtigungsTextOnline", "Der Host -§HOST- mit Adresse -§ADRESSE- war §ZEITMIN Minuten offline und ist jetzt wieder erreichbar!");
-        $this->RegisterPropertyInteger("WebFrontInstanceID", "");
-        $this->RegisterPropertyInteger("SmtpInstanceID", "");
-        $this->RegisterPropertyInteger("EigenesSkriptID", "");
+        $this->RegisterPropertyString("WebFrontInstanceID", "");
+        $this->RegisterPropertyString("SmtpInstanceID", "");
+        $this->RegisterPropertyString("EigenesSkriptID", "");
         $this->RegisterPropertyBoolean("LoggingAktiv", false);
         $this->RegisterPropertyBoolean("OfflineBenachrichtigung", false);
         $this->RegisterPropertyBoolean("OnlineBenachrichtigung", false);
