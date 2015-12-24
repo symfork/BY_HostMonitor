@@ -2,7 +2,7 @@
   "elements":
   [
 
-    { "type": "Label", "label": "####### HostMonitor v1.0 (24.12.2015 10.15Uhr) #######" },
+    { "type": "Label", "label": "####### HostMonitor v1.0 (24.12.2015 13.30Uhr) #######" },
     { "type": "ValidationTextBox", "name": "HostName", "caption": "Host-Name" },
     { "type": "ValidationTextBox", "name": "HostAdresse", "caption": "Host-IP/URL" },
     { "type": "NumberSpinner", "name": "PingTimeout", "caption": "Ping-Timeout (ms)" },
