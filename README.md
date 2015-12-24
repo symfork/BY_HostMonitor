@@ -27,9 +27,11 @@ ausgelöst wird (0 = sofortige Benachrichtigung, wenn Host als Offline erkannt w
 
 Ebenfalls kann man ein eigenes Skript festlegen, welches zur Benachrichtigung verwendet wird. Dieses Skript wird bei nicht Erreichbarkeit
 des Host, nach eingestellter Zeit oder sofort, ausgeführt. Hier kann man dann Benachrichtigungen über Sonos, Enigma2-Nachricht, SMS, ... einrichten.
-Für eigene Aktionen stehen einem im ausgewählten Skript die Variablen $_IPS["HMON_Hostname"] (Name des Host), $_IPS["HMON_Adresse"] (Adresse des Host),
-$_IPS["HMON_Hoststatus"] (online/offline), $_IPS["HMON_Text"] (Text als String) und $_IPS["HMON_Zeit"] (Sekunden seit letzter Erreichbarkeit)
-zur Verfügung (siehe Beispiel-Skript).
+Für eigene Aktionen stehen einem im ausgewählten Skript die folgenden Variablen zur Verfügung:
+```
+$_IPS["HMON_Hostname"] (Name des Host), $_IPS["HMON_Adresse"] (Adresse des Host), $_IPS["HMON_Hoststatus"] (online/offline),
+$_IPS["HMON_Text"] (Text als String) und $_IPS["HMON_Zeit"] (Sekunden seit letzter Erreichbarkeit)
+```
 
 #### Beispiel-Skript für eigene Aktion
 ```php
