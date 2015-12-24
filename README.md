@@ -29,20 +29,20 @@ Ebenfalls kann man ein eigenes Skript festlegen, welches zur Benachrichtigung ve
 des Host, nach eingestellter Zeit oder sofort, ausgeführt. Hier kann man dann Benachrichtigungen über Sonos, Enigma2-Nachricht, SMS, ... einrichten.
 Für eigene Aktionen stehen einem im ausgewählten Skript die folgenden Variablen zur Verfügung:
 ```
-$_IPS["HMON_Hostname"] (Name des Host), $_IPS["HMON_Adresse"] (Adresse des Host),
-$_IPS["HMON_Hoststatus"] (online/offline), $_IPS["HMON_Text"] (Text als String),
+$_IPS["HMON_Name"] (Name des Host), $_IPS["HMON_Adresse"] (Adresse des Host),
+$_IPS["HMON_Status"] (online/offline), $_IPS["HMON_Text"] (Text als String),
 $_IPS["HMON_Zeit"] (Sekunden seit letzter Erreichbarkeit)
 ```
 
 #### Beispiel-Skript für eigene Aktion
 ```php
 <?
-if ($_IPS["HMON_Hoststatus"] === "offline")
+if ($_IPS["HMON_Status"] === "offline")
 {
 	IPS_LogMessage("HostMonitor-OFFLINE", $_IPS["HMON_Text"]); // Schreibt den Text ins IPS-Log (zu sehen im Meldungen-Fenster in der IPS-Console)
 	Enigma2BY_SendMsg($Enigma2BYinstanzID, $_IPS["HMON_Text"], 3, 10); // Zeigt 10 Sekunden lang eine Alarm-Nachricht über einen Enigma2-Receiver an
 }
-elseif ($_IPS["HMON_Hoststatus"] === "online")
+elseif ($_IPS["HMON_Status"] === "online")
 {
 	IPS_LogMessage("HostMonitor-ONLINE", $_IPS["HMON_Text"]); // Schreibt den Text ins IPS-Log (zu sehen im Meldungen-Fenster in der IPS-Console)
 	Enigma2BY_SendMsg($Enigma2BYinstanzID, $_IPS["HMON_Text"], 1, 10); // Zeigt 10 Sekunden lang eine Info-Nachricht über einen Enigma2-Receiver an
