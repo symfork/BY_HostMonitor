@@ -11,6 +11,7 @@ class HostMonitor extends IPSModule
         //You cannot use variables here. Just static values.
         $this->RegisterPropertyString("HostName", "");
         $this->RegisterPropertyString("HostAdresse", "");
+        $this->RegisterPropertyInteger("PingTimeout", "1000");
         $this->RegisterPropertyInteger("Intervall", 60);
         $this->RegisterPropertyInteger("AlarmZeitDiff", 0);
         $this->RegisterPropertyString("BenachrichtigungsTextOffline", "Der Host -§HOST- mit Adresse -§ADRESSE- ist seit §ZEITMIN Minuten nicht mehr erreichbar!");
@@ -115,9 +116,10 @@ class HostMonitor extends IPSModule
     {
       	$Hostname = $this->ReadPropertyString("HostName");
 				$Hostadresse = $this->ReadPropertyString("HostAdresse");
+				$PingTimeout = $this->ReadPropertyInteger("PingTimeout");
       	if (($Hostname != "") AND ($Hostadresse != ""))
         {      	
-						$result = @Sys_Ping($Hostadresse, 1000);
+						$result = @Sys_Ping($Hostadresse, $PingTimeout);
 						$this->SetValueBoolean("HostStatus", $result);
 						if ($result === true)
 						{

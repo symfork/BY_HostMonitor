@@ -2,19 +2,20 @@
   "elements":
   [
 
-    { "type": "Label", "label": "####### HostMonitor v1.0 (24.12.2015 00.15Uhr) #######" },
+    { "type": "Label", "label": "####### HostMonitor v1.0 (24.12.2015 10.00Uhr) #######" },
     { "type": "ValidationTextBox", "name": "HostName", "caption": "Host-Name" },
     { "type": "ValidationTextBox", "name": "HostAdresse", "caption": "Host-IP/URL" },
+    { "type": "NumberSpinner", "name": "PingTimeout", "caption": "Ping-Timeout (ms)" },
     { "type": "CheckBox", "name": "LoggingAktiv", "caption": "Logging der Status-Variable" },
     { "type": "Label", "label": "Intervall für die Prüfung des Host:" },
     { "type": "IntervalBox", "name": "Intervall", "caption": "Sekunden" },
     { "type": "Label", "label": "Nach X Sekunden ohne Ping wird eine Benachrichtigung über die aktivierten Wege ausgelöst (0 = sofortige Benachrichtigung):" },
-    { "type": "ValidationTextBox", "name": "AlarmZeitDiff", "caption": "Sek. bis Benachr." },
+    { "type": "NumberSpinner", "name": "AlarmZeitDiff", "caption": "Sek. bis Benachr." },
     { "type": "Label", "label": "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" },
     { "type": "Label", "label": "Text der als Benachrichtigung gesendet wird (es stehen verschiedene Variablen zur Verfügung). Wird nichts aktiviert, findet keine Benachrichtigung statt!" },
     { "type": "Label", "label": "§HOST = Hostname, §ADRESSE = Hostadresse, §ZEITSEK = Sekunden offline/online, §ZEITMIN = Minuten offline/online, §ZEITSTD = Stunden offline/online, §ZEITTAGE = Tage offline/online" },
     { "type": "CheckBox", "name": "OfflineBenachrichtigung", "caption": "Offline-Benachrichtigung (Benachrichtigung, wenn ein Gerät nicht mehr erreichbar ist)" },
-    { "type": "ValidationTextBox", "name": "BenachrichtigungsTextOffline", "caption": "Benachr.-Text (offline)" },
+    { "type": "ValidationTextBox", "name": "BenachrichtigungsTextOffline", "caption": "Text (offline)" },
     { "type": "CheckBox", "name": "OnlineBenachrichtigung", "caption": "Online-Benachrichtigung (Benachrichtigung, wenn ein Gerät offline gemeldet wurde und dann wieder erreichbar ist)" },
     { "type": "ValidationTextBox", "name": "BenachrichtigungsTextOnline", "caption": "Benachr.-Text (online)" },
     { "type": "Label", "label": "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" },
