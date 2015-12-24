@@ -26,7 +26,7 @@ class HostMonitor extends IPSModule
         $this->RegisterPropertyBoolean("EMailMsgAktiv", false);
         $this->RegisterPropertyBoolean("EigenesSkriptAktiv", false);
         $this->RegisterTimer("HMON_UpdateTimer", 0, 'HMON_Update($_IPS[\'TARGET\']);');
-        $this->RegisterTimer("HMON_BenachrichtigungOfflineTimer", 0, 'HMON_BenachrichtigungOffline($_IPS[\'TARGET\'], \'offline\');');
+        $this->RegisterTimer("HMON_BenachrichtigungOfflineTimer", 0, 'HMON_Benachrichtigung($_IPS[\'TARGET\'], false, true);');
     }
 
     public function Destroy()
