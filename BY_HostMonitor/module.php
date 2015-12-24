@@ -208,7 +208,7 @@ class HostMonitor extends IPSModule
         		$SkriptID = $this->ReadPropertyString("EigenesSkriptID");
         		if (($SkriptID != "") AND (@IPS_ScriptExists($SkriptID) === true))
         		{
-        				IPS_RunScriptEx($SkriptID, array("HMON_Name" => $Hostname, "HMON_Adresse" => $Hostadresse, "HMON_Status" => $Hoststatus, "HMON_Text" => $Text, "HMON_Zeit" => $Hostname));
+        				IPS_RunScriptEx($SkriptID, array("HMON_Name" => $Hostname, "HMON_Adresse" => $Hostadresse, "HMON_Status" => $Hoststatus, "HMON_Text" => $Text, "HMON_Zeit" => $LastOnlineTimeDiffSEK));
         		}		
         }
     }
