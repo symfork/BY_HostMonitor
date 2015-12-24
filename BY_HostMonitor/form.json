@@ -2,7 +2,7 @@
   "elements":
   [
 
-    { "type": "Label", "label": "####### HostMonitor v1.0 (24.12.2015 13.30Uhr) #######" },
+    { "type": "Label", "label": "####### HostMonitor v1.0 (24.12.2015 13.40Uhr) #######" },
     { "type": "ValidationTextBox", "name": "HostName", "caption": "Host-Name" },
     { "type": "ValidationTextBox", "name": "HostAdresse", "caption": "Host-IP/URL" },
     { "type": "NumberSpinner", "name": "PingTimeout", "caption": "Ping-Timeout (ms)" },
@@ -17,7 +17,7 @@
     { "type": "CheckBox", "name": "OfflineBenachrichtigung", "caption": "Offline-Benachrichtigung (Benachrichtigung, wenn ein Gerät nicht mehr erreichbar ist)" },
     { "type": "ValidationTextBox", "name": "BenachrichtigungsTextOffline", "caption": "Text (offline)" },
     { "type": "CheckBox", "name": "OnlineBenachrichtigung", "caption": "Online-Benachrichtigung (Benachrichtigung, wenn ein Gerät offline gemeldet wurde und dann wieder erreichbar ist)" },
-    { "type": "ValidationTextBox", "name": "BenachrichtigungsTextOnline", "caption": "Benachr.-Text (online)" },
+    { "type": "ValidationTextBox", "name": "BenachrichtigungsTextOnline", "caption": "Text (online)" },
     { "type": "Label", "label": "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" },
     { "type": "Label", "label": "WebFront-Instanz, welche für den Versand der Push-Nachrichten verwendet wird (gültige IPS-Subscription notwendig):" },
     { "type": "SelectInstance", "name": "WebFrontInstanceID", "caption": "WebFront-Instanz" },
@@ -26,8 +26,8 @@
     { "type": "SelectInstance", "name": "SmtpInstanceID", "caption": "SMTP-Instanz" },
     { "type": "CheckBox", "name": "EMailMsgAktiv", "caption": "EMail-Benachrichtigung" },
     { "type": "Label", "label": "Skript für eigene Benachrichtigungs-Aktion (Sonos, Enigma2-Nachricht, LED blinken, SMS, ...):" },
-    { "type": "SelectScript", "name": "EigenesSkriptID", "caption": "Eigene Aktion (Skript)" },
-    { "type": "CheckBox", "name": "EigenesSkriptAktiv", "caption": "Eigenes-Skript" }
+    { "type": "SelectScript", "name": "EigenesSkriptID", "caption": "Skript" },
+    { "type": "CheckBox", "name": "EigenesSkriptAktiv", "caption": "Eigenes Skript" }
 
   ],
   "actions":
