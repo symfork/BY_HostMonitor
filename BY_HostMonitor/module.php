@@ -125,6 +125,7 @@ class HostMonitor extends IPSModule
 								if ((GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === true) AND ($this->ReadPropertyBoolean("OnlineBenachrichtigung") === true))
 								{
 										$this->Benachrichtigung(true, true);
+										$this->SetValueBoolean("HostStatus", $result);
 								}
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
 						}
@@ -137,6 +138,7 @@ class HostMonitor extends IPSModule
 										{
 												$this->Benachrichtigung(false, true);
 												$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
+												$this->SetValueBoolean("HostStatus", $result);
 										}
 										$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", $BenachrichtigungsTimer);
 								}
@@ -154,7 +156,6 @@ class HostMonitor extends IPSModule
 						if ($live == true)
 						{
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", true);
-								$this->SetValueBoolean("HostStatus", $result);
 						}
 				}
 				elseif ($status == true)
@@ -164,7 +165,6 @@ class HostMonitor extends IPSModule
 						if ($live == true)
 						{
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
-								$this->SetValueBoolean("HostStatus", $result);
 						}
 				}
 				$Hostname = $this->ReadPropertyString("HostName");
