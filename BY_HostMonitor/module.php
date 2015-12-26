@@ -117,7 +117,6 @@ class HostMonitor extends IPSModule
       	if (($Hostname != "") AND ($Hostadresse != ""))
         {      	
 						$result = @Sys_Ping($Hostadresse, $PingTimeout);
-						$this->SetValueBoolean("HostStatus", $result);
 						if ($result === true)
 						{
 								$HostLastOnlineTime = time();
@@ -155,6 +154,7 @@ class HostMonitor extends IPSModule
 						if ($live == true)
 						{
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", true);
+								$this->SetValueBoolean("HostStatus", $result);
 						}
 				}
 				elseif ($status == true)
@@ -164,6 +164,7 @@ class HostMonitor extends IPSModule
 						if ($live == true)
 						{
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
+								$this->SetValueBoolean("HostStatus", $result);
 						}
 				}
 				$Hostname = $this->ReadPropertyString("HostName");
