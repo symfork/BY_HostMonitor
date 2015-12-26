@@ -117,9 +117,9 @@ class HostMonitor extends IPSModule
       	if (($Hostname != "") AND ($Hostadresse != ""))
         {      	
 						$result = @Sys_Ping($Hostadresse, $PingTimeout);
+						$HostLastOnlineTime = time();
 						if ($result === true)
 						{
-								$HostLastOnlineTime = time();
 								// OK-Benachrichtung senden, wenn vorher Offline-Benachrichtung gesendet wurde > wenn Einstellung aktiv
 								if ((GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === true) AND ($this->ReadPropertyBoolean("OnlineBenachrichtigung") === true))
 								{
@@ -138,11 +138,15 @@ class HostMonitor extends IPSModule
 										if ($BenachrichtigungsTimer == 0)
 										{
 												$this->Benachrichtigung(false, true);
+												$this->SetValueBoolean("HostStatus", $result);
 												$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
 										}
 										$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", $BenachrichtigungsTimer);
 								}
-								$this->SetValueInteger("HostLastOnline", $HostLastOnlineTime);
+								else
+								{
+										$this->SetValueBoolean("HostStatus", $result);
+								}
 						}
 				}
     }
