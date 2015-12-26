@@ -120,17 +120,18 @@ class HostMonitor extends IPSModule
 						if ($result === true)
 						{
 								$HostLastOnlineTime = time();
-								$this->SetValueInteger("HostLastOnline", $HostLastOnlineTime);
 								// OK-Benachrichtung senden, wenn vorher Offline-Benachrichtung gesendet wurde > wenn Einstellung aktiv
 								if ((GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === true) AND ($this->ReadPropertyBoolean("OnlineBenachrichtigung") === true))
 								{
 										$this->Benachrichtigung(true, true);
-										$this->SetValueBoolean("HostStatus", $result);
 								}
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
+								$this->SetValueBoolean("HostStatus", $result);
+								$this->SetValueInteger("HostLastOnline", $HostLastOnlineTime);
 						}
 						else
 						{
+								$this->SetValueBoolean("HostStatus", $result);
 								if ((GetValueBoolean($this->GetIDForIdent("HostBenachrichtigungsFlag")) === false) AND ($this->ReadPropertyBoolean("OfflineBenachrichtigung") === true))
 								{
 										$BenachrichtigungsTimer = $this->ReadPropertyInteger("AlarmZeitDiff");
@@ -138,10 +139,10 @@ class HostMonitor extends IPSModule
 										{
 												$this->Benachrichtigung(false, true);
 												$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
-												$this->SetValueBoolean("HostStatus", $result);
 										}
 										$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", $BenachrichtigungsTimer);
 								}
+								$this->SetValueInteger("HostLastOnline", $HostLastOnlineTime);
 						}
 				}
     }
