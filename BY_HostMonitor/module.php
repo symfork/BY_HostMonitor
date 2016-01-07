@@ -125,6 +125,7 @@ class HostMonitor extends IPSModule
 								{
 										$this->Benachrichtigung(true, true);
 								}
+								$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
 								$this->SetValueBoolean("HostStatus", $result);
 								$this->SetValueInteger("HostLastOnline", $HostLastOnlineTime);
