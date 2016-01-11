@@ -26,7 +26,6 @@ class HostMonitor extends IPSModule
         $this->RegisterPropertyBoolean("EMailMsgAktiv", false);
         $this->RegisterPropertyBoolean("EigenesSkriptAktiv", false);
         $this->RegisterTimer("HMON_UpdateTimer", 0, 'HMON_Update($_IPS[\'TARGET\']);');
-        $this->RegisterTimer("HMON_BenachrichtigungOfflineTimer", 0, 'HMON_Benachrichtigung($_IPS[\'TARGET\'], false, true);');
     }
 
     public function Destroy()
@@ -76,7 +75,7 @@ class HostMonitor extends IPSModule
 		        
 		        //Timer erstellen
         		$this->SetTimerInterval("HMON_UpdateTimer", $this->ReadPropertyInteger("Intervall"));
-        		$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
+        		$this->SetTimerByIdent_InSekunden("HMON_BenachrichtigungOfflineTimer", false);
         		
         		//Update
         		$this->Update();
@@ -126,7 +125,7 @@ class HostMonitor extends IPSModule
 										$this->Benachrichtigung(true, true);
 								}
 								$this->SetValueBoolean("HostBenachrichtigungsFlag", false);
-								$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
+								$this->SetTimerByIdent_InSekunden("HMON_BenachrichtigungOfflineTimer", false);
 								$this->SetValueBoolean("HostStatus", $result);
 								$this->SetValueInteger("HostLastOnline", $HostLastOnlineTime);
 						}
@@ -139,7 +138,10 @@ class HostMonitor extends IPSModule
 										{
 												$this->Benachrichtigung(false, true);
 										}
-										$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", $BenachrichtigungsTimer);
+										if (GetValueBoolean($this->GetIDForIdent("HostStatus")) === true)
+										{
+												$this->SetTimerByIdent_InSekunden("HMON_BenachrichtigungOfflineTimer", $BenachrichtigungsTimer);
+										}
 								}
 								$this->SetValueBoolean("HostStatus", $result);
 						}
@@ -150,7 +152,7 @@ class HostMonitor extends IPSModule
     {
 				if ($status == false) 
 				{
-						$this->SetTimerInterval("HMON_BenachrichtigungOfflineTimer", 0);
+						$this->SetTimerByIdent_InSekunden("HMON_BenachrichtigungOfflineTimer", false);
 						$BenachrichtigungsText = $this->ReadPropertyString("BenachrichtigungsTextOffline");
 						$Hoststatus = "offline";
 						if ($live == true)
@@ -340,5 +342,29 @@ class HostMonitor extends IPSModule
                 IPS_SetEventActive($id, true);
         }
     }
+    
+    protected function SetTimerByIdent_InSekunden($ident, $Sekunden)
+    {
+			   $eid = @IPS_GetObjectIDByIdent($ident, $this->InstanceID);
+			   if ($eid === false) {
+					   	$eid = IPS_CreateEvent(1);
+				      IPS_SetParent($eid, $this->InstanceID);
+				      IPS_SetName($eid, $ident);
+				      IPS_SetIdent($eid, $ident);
+				      IPS_SetEventScript($eid, 'HMON_Benachrichtigung($_IPS[\'TARGET\'], false, true);');
+				      IPS_SetInfo($eid, "this timer was created by script #".$_IPS['SELF']);
+			   }
+			   if ($Sekunden === false)
+			   {
+			      	IPS_SetEventActive($eid, false);
+			   			return $eid;
+			   }
+			   else
+			   {
+					   	IPS_SetEventCyclicTimeFrom($eid, intval(date("H", time() + $Sekunden)), intval(date("i", time() + $Sekunden)), intval(date("s", time() + $Sekunden)));
+					   	IPS_SetEventActive($eid, true);
+					   	return $eid;
+				}
+		}
 }
 ?>
