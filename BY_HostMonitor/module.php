@@ -76,6 +76,7 @@ class HostMonitor extends IPSModule
 		        //Timer erstellen
         		$this->SetTimerInterval("HMON_UpdateTimer", $this->ReadPropertyInteger("Intervall"));
         		$this->SetTimerByIdent_InSekunden("HMON_BenachrichtigungOfflineTimer", false);
+        		IPS_SetHidden($this->GetIDForIdent("HMON_BenachrichtigungOfflineTimer"), true);
         		
         		//Update
         		$this->Update();
